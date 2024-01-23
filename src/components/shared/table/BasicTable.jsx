@@ -1,122 +1,137 @@
+import { useMemo } from "react";
+import MOCK_DATA from "./MOCK_DATA.json";
 import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-} from "@tanstack/react-table";
-import mData from "./MOCK_DATA.json";
-import { useMemo, useState } from "react";
-import {columns} from "../../lib/navigation"
-
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+} from "react-table";
+import { COLUMNS } from "../../lib/navigation";
+import { VscArrowCircleDown, VscArrowCircleUp } from "react-icons/vsc";
+import GloabalFilter from "./GloabalFilter";
 
 const BasicTable = () => {
-  const data = useMemo(() => mData, []);
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => MOCK_DATA, []);
 
- 
-  const [sorting, setSorting] = useState([]);
-  const [filtering, setFiltering] = useState("");
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting: sorting,
-      globalFilter: filtering,
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
     },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setFiltering,
-  });
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    gotoPage,
+    pageCount,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = tableInstance;
+
+  const { globalFilter, pageIndex } = state;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Table</h1>
-      <div className="flex items-center mb-4">
-        <input
-          type="text"
-          value={filtering}
-          onChange={(e) => setFiltering(e.target.value)}
-          onFocus={(e) => (e.target.style.border = "none")}
-          onBlur={(e) => (e.target.style.border = "1px solid #e2e8f0")}
-          className=" p-2 border border-gray-300 rounded-l-none rounded-lg focus:outline-none"
-          placeholder="Search..."
-        />
-      </div>
-      <div className="shadow-lg overflow-x-auto rounded-lg">
-        <table className="min-w-full divide-y divide-gray-300">
-          <thead className="bg-violet-500 text-white">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className="py-3 px-4 text-left font-semibold cursor-pointer"
-                  >
-                    {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {
-                          { asc: "^", desc: "v" }[
-                            header.column.getIsSorted() ?? null
-                          ]
-                        }
-                      </div>
+    <div className="shadow-lg p-4 m-10 border border-b-gray-300 rounded-md bg-white overflow-x-auto">
+      <GloabalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      <table {...getTableProps} className="w-full mt-4 table-auto">
+        <thead className="bg-gray-200">
+          {headerGroups.map((headerGroup) => (
+            <tr
+              key={headerGroup.id}
+              {...headerGroup.getHeaderGroupProps()}
+              className="border-b"
+            >
+              {headerGroup.headers.map((column) => (
+                <th
+                  key={column.id}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="py-2 px-4 text-left"
+                >
+                  {column.render("Header")}
+                  <span className="ml-1">
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <VscArrowCircleDown className="text-blue-500" />
+                      ) : (
+                        <VscArrowCircleUp className="text-blue-500" />
+                      )
+                    ) : (
+                      ""
                     )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-
-          <tbody className="bg-white divide-y divide-gray-500">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-100 transition-all">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="py-3 px-4 whitespace-nowrap">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps} className="divide-y">
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr key={row.id} {...row.getRowProps()} className="hover:bg-gray-100">
+                {row.cells.map((cell) => (
+                  <td key={cell.column.id} {...cell.getCellProps()} className="py-2 px-4">
+                    {cell.render("Cell")}
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-4">
-        <button
-          onClick={() => table.setPageIndex(0)}
-          className="py-2 px-4 bg-violet-500 text-white rounded-xl hover:bg-violet-900 transition-all"
-        >
-          First
-        </button>
-        <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="py-2 px-4 ml-2 bg-violet-500 text-white rounded-xl hover:bg-violet-900 transition-all"
-        >
-          Prev
-        </button>
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="py-2 px-4 ml-2 bg-violet-500 text-white rounded-xl hover:bg-violet-900 transition-all"
-        >
-          Next
-        </button>
-        <button
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          className="py-2 px-4 ml-2 bg-violet-500 text-white rounded-xl hover:bg-violet-900 transition-all"
-        >
-          Last
-        </button>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="mt-4 flex items-center justify-between">
+        <div>
+          <span>
+            Page {""}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>
+            {""}
+          </span>
+        </div>
+        <div className="space-x-2">
+          <button
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+            className="px-2 py-1 rounded-md bg-blue-500 text-white"
+          >
+            {'<<'}
+          </button>
+          <button
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+            className="px-2 py-1 rounded-md bg-blue-500 text-white"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+            className="px-2 py-1 rounded-md bg-blue-500 text-white"
+          >
+            Next
+          </button>
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+            className="px-2 py-1 rounded-md bg-blue-500 text-white"
+          >
+            {'>>'}
+          </button>
+        </div>
       </div>
     </div>
   );

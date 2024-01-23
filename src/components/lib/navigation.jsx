@@ -67,27 +67,37 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     icon: <MdLogout />,
   },
 ];
-
- export const columns = [
+export const COLUMNS = [
   {
-    header: "ID",
-    accessorKey: "id",
+    Header: "id",
+    accessor: "id",
   },
   {
-    header: "NAME",
-    accessorFn: (row) => `${row.first_name} ${row.last_name}`,
+    Header: "Image",
+    accessor: "image",
+    Cell: ({ value }) =>
+      value ? (
+        <img src={value} alt="User" style={{ width: "50px", height: "50px" }} />
+      ) : null,
   },
   {
-    header: "EMAIL",
-    accessorKey: "email",
+    Header: "first_name",
+    accessor: "first_name",
   },
   {
-    header: "GENDER",
-    accessorKey: "gender",
+    Header: "last_name",
+    accessor: "last_name",
   },
   {
-    header: "IP ADDRESS",
-    accessorKey: "ip_address",
+    Header: "email",
+    accessor: "email",
+  },
+  {
+    Header: "gender",
+    accessor: "gender",
+  },
+  {
+    Header: "ip_address",
+    accessor: "ip_address",
   },
 ];
-

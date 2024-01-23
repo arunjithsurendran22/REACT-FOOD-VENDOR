@@ -1,30 +1,24 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../components/authorization/api";
-import { Link } from "react-router-dom";
-import BasicTable from "../components/shared/table/BasicTable";
+import { toast } from "react-toastify";
 
 const ProductsList = () => {
-  const navigate = useNavigate();
+  const [productItems, setProductItems] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductItems = async () => {
       try {
         const response = await api.get("/products/add-on-item/get/list");
+        setProductItems(response.data);
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        toast.error("Failed to fetch Product Items");
       }
     };
+    fetchProductItems()
+  },[]);
 
-    fetchProducts();
-  }, []);
-
-  return (
-    <div>
-      <BasicTable />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default ProductsList;
