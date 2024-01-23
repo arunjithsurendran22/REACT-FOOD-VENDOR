@@ -8,6 +8,7 @@ import { MdSoupKitchen } from "react-icons/md";
 const ProductsList = () => {
   const [productItems, setProductItems] = useState([]);
 
+
   //product list items
   const PRODUCTLIST = [
     {
