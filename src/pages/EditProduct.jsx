@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { useParams ,useNavigate} from "react-router-dom";
 import api from "../components/authorization/api";
+import { toast } from "react-toastify";
 
-const AddProduct = () => {
-  const navigate = useNavigate();
-
+const EditProduct = () => {
+  const { productId } = useParams();
+  const navigate =useNavigate()
   const [productTitle, setProductTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -14,25 +14,37 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [error, setError] = useState(null);
+  const [specificProduct, setSpecificProduct] = useState({});
 
-  const categoryId = selectedCategory;
-
+  console.log(specificProduct);
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchProductDetails = async () => {
       try {
-        const response = await api.get("/products/add-on-category/get/list");
-        console.log(response.data.categories);
-        setCategories(response.data.categories);
+        const response = await api.get(
+          `/products/add-on-item/get/specific-product/${productId}`
+        );
+        const categoryList = await api.get(
+          "/products/add-on-category/get/list"
+        );
+
+        setSpecificProduct(response.data);
+        setCategories(categoryList.data.categories);
       } catch (error) {
-        setError("Failed to fetch categories");
-        console.error("Error fetching categories:", error);
+        toast.error("Failed to fetch specific product");
       }
     };
-    fetchCategories();
-  }, []);
+    fetchProductDetails();
+  }, [productId]);
+
+  useEffect(() => {
+    setProductTitle(specificProduct.productTitle || "");
+    setDescription(specificProduct.description || "");
+    setPrice(specificProduct.price || "");
+    setQuantity(specificProduct.quantity || "");
+    setSelectedCategory(specificProduct.category || "");
+  }, [specificProduct]);
 
   const handleFileChange = (e) => {
-    // Handle image file input change
     const file = e.target.files[0];
     setImage(file);
   };
@@ -40,7 +52,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!categoryId) {
+    if (!selectedCategory) {
       setError("Please select a category");
       return;
     }
@@ -49,23 +61,18 @@ const AddProduct = () => {
     formData.append("productTitle", productTitle);
     formData.append("description", description);
     formData.append("price", price);
-    formData.append("quantity", quantity); 
+    formData.append("quantity", quantity);
     formData.append("categoryId", selectedCategory);
     formData.append("image", image);
 
     try {
-      const response = await api.post(
-        `/products/add-on-item/create/${categoryId}`,
-        formData
-      );
-
-      console.log(response);
-      navigate("/products-list");
-      toast.success("Product item added successfully");
+      await api.put(`/products/add-on-item/update/${productId}`, formData);
+      toast.success("Product item updated successfully");
+      navigate("/products-list")
     } catch (error) {
-      console.error("Error adding product item:", error);
-      setError("Failed to add product item");
-      toast.error("Failed to add product item");
+      console.error("Error updating product item:", error);
+      setError("Failed to update product item");
+      toast.error("Failed to update product item");
     }
   };
 
@@ -74,10 +81,10 @@ const AddProduct = () => {
       <div className="md:w-8/12 my-7">
         <form
           onSubmit={handleSubmit}
-          className="p-10 rounded-md shadow-xl  bg-white border border-gray-400 "
+          className="p-10 rounded-md shadow-xl bg-white border border-gray-400"
         >
           <h1 className="text-2xl font-bold mb-4 text-black italic">
-            ADD PRODUCT ITEM
+            EDIT PRODUCT ITEM
           </h1>
           {error && <div className="text-red-500 mb-4">{error}</div>}
 
@@ -88,9 +95,8 @@ const AddProduct = () => {
               name="productTitle"
               value={productTitle}
               onChange={(e) => setProductTitle(e.target.value)}
-              placeholder="Title"
+              placeholder={productTitle}
               className="mt-1 p-2 border w-full rounded-md"
-              required
             />
           </div>
           <div className="mb-4">
@@ -103,7 +109,6 @@ const AddProduct = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Description"
               className="mt-1 p-2 border w-full rounded-md resize-y word-wrap break-word"
-              required
             ></textarea>
           </div>
           <div className="mb-4">
@@ -115,7 +120,6 @@ const AddProduct = () => {
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Price"
               className="mt-1 p-2 border w-full rounded-md"
-              required
             />
           </div>
           <div className="mb-4">
@@ -127,7 +131,6 @@ const AddProduct = () => {
               onChange={(e) => setQuantity(e.target.value)}
               placeholder="Quantity"
               className="mt-1 p-2 border w-full rounded-md"
-              required
             />
           </div>
           <div className="mb-4">
@@ -137,7 +140,6 @@ const AddProduct = () => {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="mt-1 p-2 border w-full rounded-md"
-              required
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
@@ -161,14 +163,13 @@ const AddProduct = () => {
               onChange={handleFileChange}
               accept="image/*"
               className="mt-1 p-2 border w-full rounded-md"
-              required
             />
           </div>
           <button
             type="submit"
             className="bg-violet-400 text-white px-4 py-2 rounded-md hover:bg-violet-700"
           >
-            Add Product
+            Update Product
           </button>
         </form>
       </div>
@@ -176,4 +177,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

@@ -12,6 +12,7 @@ import AddProduct from "./pages/AddProduct";
 import ProductsList from "./pages/ProductsList";
 import ViewOrders from "./components/shared/ViewOrders";
 import BasicTable from "./components/shared/table/BasicTable";
+import EditProduct from "./pages/EditProduct";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/get-profile" element={<Profile />} />
           <Route path="/products-list" element={<ProductsList />} />
           <Route path="/add-product" element={<AddProduct />} />
+          <Route path="/edit-product/:productId" element={<EditProduct/>}/>
           <Route path="/categories" element={<Categories />} />
           <Route path="/view-orders" element={<ViewOrders/>}/>
         </Route>

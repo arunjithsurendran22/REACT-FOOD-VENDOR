@@ -1,18 +1,16 @@
 import { useMemo } from "react";
-import MOCK_DATA from "./MOCK_DATA.json";
 import {
   useTable,
   useSortBy,
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import { COLUMNS } from "../../lib/navigation";
 import { VscArrowCircleDown, VscArrowCircleUp } from "react-icons/vsc";
 import GloabalFilter from "./GloabalFilter";
 
-const BasicTable = () => {
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+const BasicTable = ({ columnsProps, dataProps }) => {
+  const columns = useMemo(() => columnsProps, [columnsProps]);
+  const data = useMemo(() => dataProps, [dataProps]);
 
   const tableInstance = useTable(
     {
@@ -44,10 +42,10 @@ const BasicTable = () => {
   const { globalFilter, pageIndex } = state;
 
   return (
-    <div className="shadow-lg p-4 m-10 border border-b-gray-300 rounded-md bg-white overflow-x-auto">
+    <div className="shadow-lg p-4 mx-20 my-10 border border-b-gray-300 rounded-md bg-white overflow-x-auto">
       <GloabalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      <table {...getTableProps} className="w-full mt-4 table-auto">
-        <thead className="bg-gray-200">
+      <table {...getTableProps} className="w-full mt-4 table-auto ">
+        <thead className="bg-violet-400 ">
           {headerGroups.map((headerGroup) => (
             <tr
               key={headerGroup.id}
@@ -58,13 +56,13 @@ const BasicTable = () => {
                 <th
                   key={column.id}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="py-2 px-4 text-left"
+                  className="py-2 px-4 text-left  "
                 >
                   {column.render("Header")}
-                  <span className="ml-1">
+                  <span className="ml-1 ">
                     {column.isSorted ? (
                       column.isSortedDesc ? (
-                        <VscArrowCircleDown className="text-blue-500" />
+                        <VscArrowCircleDown className="text-blue-500 " />
                       ) : (
                         <VscArrowCircleUp className="text-blue-500" />
                       )
@@ -81,9 +79,17 @@ const BasicTable = () => {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr key={row.id} {...row.getRowProps()} className="hover:bg-gray-100">
+              <tr
+                key={row.original._id}
+                {...row.getRowProps()}
+                className="hover:bg-gray-100"
+              >
                 {row.cells.map((cell) => (
-                  <td key={cell.column.id} {...cell.getCellProps()} className="py-2 px-4">
+                  <td
+                    key={cell.column._id}
+                    {...cell.getCellProps()}
+                    className=" px-4"
+                  >
                     {cell.render("Cell")}
                   </td>
                 ))}
@@ -108,7 +114,7 @@ const BasicTable = () => {
             disabled={!canPreviousPage}
             className="px-2 py-1 rounded-md bg-blue-500 text-white"
           >
-            {'<<'}
+            {"<<"}
           </button>
           <button
             onClick={() => previousPage()}
@@ -129,7 +135,7 @@ const BasicTable = () => {
             disabled={!canNextPage}
             className="px-2 py-1 rounded-md bg-blue-500 text-white"
           >
-            {'>>'}
+            {">>"}
           </button>
         </div>
       </div>

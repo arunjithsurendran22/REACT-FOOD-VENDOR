@@ -7,6 +7,8 @@ import { MdOutlineSettings } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
 import { MdOutlineFastfood } from "react-icons/md";
+import { Link } from "react-router-dom";
+
 
 export const DASHBOARD_SIDEBAR_LINKS = [
   {
@@ -67,37 +69,6 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     icon: <MdLogout />,
   },
 ];
-export const COLUMNS = [
-  {
-    Header: "id",
-    accessor: "id",
-  },
-  {
-    Header: "Image",
-    accessor: "image",
-    Cell: ({ value }) =>
-      value ? (
-        <img src={value} alt="User" style={{ width: "50px", height: "50px" }} />
-      ) : null,
-  },
-  {
-    Header: "first_name",
-    accessor: "first_name",
-  },
-  {
-    Header: "last_name",
-    accessor: "last_name",
-  },
-  {
-    Header: "email",
-    accessor: "email",
-  },
-  {
-    Header: "gender",
-    accessor: "gender",
-  },
-  {
-    Header: "ip_address",
-    accessor: "ip_address",
-  },
-];
+
+
+
