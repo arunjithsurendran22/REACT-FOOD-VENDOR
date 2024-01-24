@@ -3,96 +3,122 @@ import api from "../components/authorization/api";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import BasicTable from "../components/shared/table/BasicTable";
 
 const Orders = () => {
-  const [orderData, setOrderData] = useState(null);
-  const [selectStatus, setSelectStatus] = useState("pending");
+  const [orderData, setOrderData] = useState([]);
+  const [orderId,setOrderId]=useState("")
+
+  // Create headers
+  const ORDERDATA = [
+    {
+      Header: "ORDER ID",
+      accessor: "orderId",
+    },
+    {
+      Header: "PAYMENT ID",
+      accessor: "paymentId",
+    },
+    {
+      Header: "NAME",
+      accessor: "name",
+    },
+    {
+      Header: "EMAIL",
+      accessor: "email",
+    },
+    {
+      Header: "CONTACT",
+      accessor: "mobile",
+    },
+    
+    {
+      Header: "STATUS",
+      accessor: "status",
+    },
+    {
+      Header: "TOTAL",
+      accessor: "total",
+    },
+    {
+      Header: "CREATED AT",
+      accessor: "createdAt",
+    },
+    {
+      Header: "VIEW",
+      accessor: "view",
+      Cell: ({ row }) => (
+        <Link to={`/view-orders`}>
+          <button>
+            <FaEye />
+          </button>
+        </Link>
+      ),
+    },
+    {
+      Header: "ACTIONS",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <select
+          value={row.original.status}
+          onChange={(e) => handleStatusChange(e.target.value)}
+        >
+          <option value="pending" >Pending</option>
+          <option value="readyToShip">ReadyToShip</option>
+          <option value="OnTheWay">OnTheWay</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Accepted">Accepted</option>
+        </select>
+      ),
+    },
+  ];
 
   useEffect(() => {
     const fetchOrderList = async () => {
       try {
         const response = await api.get("/products/orders-list/get");
-        setOrderData(response.data);
+        const orderListData = response.data.orderListData;
+  
+        if (Array.isArray(orderListData) && orderListData.length > 0) {
+          const [{ orderId }] = orderListData;
+          setOrderId(orderId);
+        }
+  
+        setOrderData(orderListData);
       } catch (error) {
         toast.error("Failed to fetch Order List");
       }
     };
+  
     fetchOrderList();
   }, []);
+  
 
   const handleStatusChange = async (newStatus) => {
     try {
       await api.post(`/products/update-order-status`, {
-        orderId: orderData.orderId,
+        orderId: orderId,
         newStatus: newStatus,
       });
-      setOrderData((prevData) => ({
-        ...prevData,
-        status: newStatus,
-      }));
+  
+      // Update the status for the specific order
+      setOrderData((prevData) =>
+        prevData.map((order) =>
+          order.orderId === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+  
       toast.success("Order status updated successfully");
     } catch (error) {
       toast.error("Failed to update order status");
     }
   };
+  
 
   return (
-    <div className="p-6">
-      <div className="overflow-x-auto shadow-lg rounded-lg">
-        {orderData ? (
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="italic text-lg text-slate-600">
-                <th className="py-2 px-4 border-b">OrderID</th>
-                <th className="py-2 px-4 border-b">Name</th>
-                <th className="py-2 px-4 border-b">Email</th>
-                <th className="py-2 px-4 border-b">Contact</th>
-                <th className="py-2 px-4 border-b">PaymentID</th>
-                <th className="py-2 px-4 border-b">Status</th>
-                <th className="py-2 px-4 border-b">Total</th>
-                <th className="py-2 px-4 border-b">CreatedAt</th>
-                <th className="py-2 px-4 border-b">Action</th>
-                <th className="py-2 px-4 border-b">View</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="font-semibold">
-                <td className="py-2 px-4 border-b">{orderData.orderId}</td>
-                <td className="py-2 px-4 border-b">{orderData.name}</td>
-                <td className="py-2 px-4 border-b">{orderData.email}</td>
-                <td className="py-2 px-4 border-b">{orderData.mobile}</td>
-                <td className="py-2 px-4 border-b">{orderData.paymentId}</td>
-                <td className="py-2 px-4 border-b">{orderData.status}</td>
-                <td className="py-2 px-4 border-b">₹ {orderData.total}</td>
-                <td className="py-2 px-4 border-b">{orderData.createdAt}</td>
-                <td className="py-2 px-4 border-b">
-                  <select
-                    value={orderData.status}
-                    onChange={(e) => handleStatusChange(e.target.value)}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="readyToShip">ReadyToShip</option>
-                    <option value="OnTheWay">OnTheWay</option>
-                    <option value="Delivered">delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                    <option value="Accepted">Accepted</option>
-                  </select>
-                </td>
-                
-                <td>
-                  <Link to="/view-orders">
-                    <button>
-                      <FaEye />
-                    </button>
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
+    <div>
+      <BasicTable dataProps={orderData} columnsProps={ORDERDATA}/>
     </div>
   );
 };

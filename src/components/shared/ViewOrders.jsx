@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "../authorization/api";
 import { toast } from "react-toastify";
 
@@ -26,7 +26,10 @@ const ViewOrders = () => {
         <h2 className="text-2xl font-bold mb-4">User Order Items</h2>
         <ul>
           {cartItems.map((item) => (
-            <li key={item._id} className="flex items-center space-x-4 py-2 border-b">
+            <li
+              key={item._id}
+              className="flex items-center space-x-4 py-2 border-b"
+            >
               <img
                 src={item.image}
                 alt={item.title}
@@ -43,12 +46,11 @@ const ViewOrders = () => {
       </div>
       <div className="flex-1 bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-4">User Address</h2>
-        <p>Street:   {userAddress.street}</p>
-        <p>City:    {userAddress.city}</p>
-        <p>State:   {userAddress.state}</p>
+        <p>Street: {userAddress.street}</p>
+        <p>City: {userAddress.city}</p>
+        <p>State: {userAddress.state}</p>
         <p>LandMark: {userAddress.landmark}</p>
         <p>Pincode: {userAddress.pincode}</p>
-
       </div>
     </div>
   );

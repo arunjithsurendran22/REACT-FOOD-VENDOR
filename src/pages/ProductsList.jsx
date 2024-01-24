@@ -44,6 +44,10 @@ const ProductsList = () => {
       accessor: "quantity",
     },
     {
+      Header: "CREATED AT",
+      accessor: "createdAt",
+    },
+    {
       Header: "Actions",
       Cell: ({ row }) => (
         <div className="flex justify-between w-40 ">

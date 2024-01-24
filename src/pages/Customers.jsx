@@ -42,7 +42,7 @@ const Customers = () => {
         const response = await api.get("/profile/customers-list/get");
         console.log(response.data);
 
-        setCustomerProfile(response.data);
+        setCustomerProfile(response.data.customerDetails);
       } catch (error) {
         console.error("Error fetching user details:", error);
         toast.error("Error fetching user details");
