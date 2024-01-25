@@ -7,7 +7,6 @@ import BasicTable from "../components/shared/table/BasicTable";
 
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
-  const [orderId,setOrderId]=useState("")
 
   // Create headers
   const ORDERDATA = [
@@ -31,7 +30,7 @@ const Orders = () => {
       Header: "CONTACT",
       accessor: "mobile",
     },
-    
+
     {
       Header: "STATUS",
       accessor: "status",
@@ -48,7 +47,7 @@ const Orders = () => {
       Header: "VIEW",
       accessor: "view",
       Cell: ({ row }) => (
-        <Link to={`/view-orders`}>
+        <Link to={`/view-orders/${row.original.orderId}`}>
           <button>
             <FaEye />
           </button>
@@ -61,9 +60,11 @@ const Orders = () => {
       Cell: ({ row }) => (
         <select
           value={row.original.status}
-          onChange={(e) => handleStatusChange(e.target.value)}
+          onChange={(e) =>
+            handleStatusChange(row.original.orderId, e.target.value)
+          }
         >
-          <option value="pending" >Pending</option>
+          <option value="pending">Pending</option>
           <option value="readyToShip">ReadyToShip</option>
           <option value="OnTheWay">OnTheWay</option>
           <option value="Delivered">Delivered</option>
@@ -78,47 +79,39 @@ const Orders = () => {
     const fetchOrderList = async () => {
       try {
         const response = await api.get("/products/orders-list/get");
-        const orderListData = response.data.orderListData;
-  
-        if (Array.isArray(orderListData) && orderListData.length > 0) {
-          const [{ orderId }] = orderListData;
-          setOrderId(orderId);
-        }
-  
+        const orderListData = response.data.orderList;
         setOrderData(orderListData);
       } catch (error) {
         toast.error("Failed to fetch Order List");
       }
     };
-  
+
     fetchOrderList();
   }, []);
-  
 
-  const handleStatusChange = async (newStatus) => {
+  const handleStatusChange = async (orderId, newStatus) => {
     try {
       await api.post(`/products/update-order-status`, {
         orderId: orderId,
         newStatus: newStatus,
       });
-  
+
       // Update the status for the specific order
       setOrderData((prevData) =>
         prevData.map((order) =>
           order.orderId === orderId ? { ...order, status: newStatus } : order
         )
       );
-  
+
       toast.success("Order status updated successfully");
     } catch (error) {
       toast.error("Failed to update order status");
     }
   };
-  
 
   return (
     <div>
-      <BasicTable dataProps={orderData} columnsProps={ORDERDATA}/>
+      <BasicTable dataProps={orderData} columnsProps={ORDERDATA} />
     </div>
   );
 };

@@ -16,7 +16,7 @@ const EditProduct = () => {
   const [error, setError] = useState(null);
   const [specificProduct, setSpecificProduct] = useState({});
 
-  console.log(specificProduct);
+  
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
