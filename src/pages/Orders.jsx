@@ -8,7 +8,6 @@ import BasicTable from "../components/shared/table/BasicTable";
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
 
-  // Create headers
   const ORDERDATA = [
     {
       Header: "ORDER ID",
@@ -30,7 +29,6 @@ const Orders = () => {
       Header: "CONTACT",
       accessor: "mobile",
     },
-
     {
       Header: "STATUS",
       accessor: "status",
@@ -42,6 +40,7 @@ const Orders = () => {
     {
       Header: "CREATED AT",
       accessor: "createdAt",
+      Cell: ({ value }) => <span>{new Date(value).toLocaleString()}</span>,
     },
     {
       Header: "VIEW",

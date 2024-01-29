@@ -46,6 +46,7 @@ const ProductsList = () => {
     {
       Header: "CREATED AT",
       accessor: "createdAt",
+      Cell: ({ value }) => <span>{new Date(value).toLocaleString()}</span>,
     },
     {
       Header: "Actions",
