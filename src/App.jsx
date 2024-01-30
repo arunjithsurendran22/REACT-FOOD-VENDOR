@@ -13,6 +13,7 @@ import ProductsList from "./pages/ProductsList";
 import ViewOrders from "./components/shared/ViewOrders";
 import BasicTable from "./components/shared/table/BasicTable";
 import EditProduct from "./pages/EditProduct";
+import DeliveryOptions from "./pages/DeliveryOptions";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/edit-product/:productId" element={<EditProduct/>}/>
           <Route path="/categories" element={<Categories />} />
           <Route path="/view-orders/:orderId" element={<ViewOrders/>}/>
+          <Route path="/delivery-options" element={<DeliveryOptions/>}/>
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

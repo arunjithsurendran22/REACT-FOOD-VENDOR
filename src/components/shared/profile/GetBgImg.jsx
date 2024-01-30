@@ -9,7 +9,6 @@ const GetBgImg = () => {
     const fetchBackgroundImage = async () => {
       try {
         const response = await api.get("image-controller/background-image/get");
-        console.log(response.data);
         setBackgroundImage(response.data.backgroundImage);
       } catch (error) {
         console.error(

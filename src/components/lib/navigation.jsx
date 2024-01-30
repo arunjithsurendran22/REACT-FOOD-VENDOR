@@ -7,8 +7,7 @@ import { MdOutlineSettings } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
 import { MdOutlineFastfood } from "react-icons/md";
-import { Link } from "react-router-dom";
-
+import { GiPostOffice } from "react-icons/gi";
 
 export const DASHBOARD_SIDEBAR_LINKS = [
   {
@@ -46,6 +45,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     label: "Messages",
     path: "/messages",
     icon: <TiMessages />,
+  },
+  {
+    key: "delivery-options",
+    label: "Delivery Options",
+    path: "/delivery-options",
+    icon: <GiPostOffice />,
   },
 ];
 
