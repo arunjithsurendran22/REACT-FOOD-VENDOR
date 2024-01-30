@@ -1,10 +1,9 @@
 import GetBgImg from "../components/shared/profile/GetBgImg";
-import UploadBgImg from "../components/shared/profile/UploadBgImg"
+
 const Profile = () => {
   return (
-    <div>
+    <div className="">
       <GetBgImg/>
-      <UploadBgImg/>
     </div>
   );
 }

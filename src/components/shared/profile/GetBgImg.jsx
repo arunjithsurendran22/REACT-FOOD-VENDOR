@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react";
 import api from "../../authorization/api";
+import UploadBgImg from "./UploadBgImg";
 
 const GetBgImg = () => {
-  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBackgroundImage = async () => {
       try {
         const response = await api.get("image-controller/background-image/get");
+        console.log(response.data);
         setBackgroundImage(response.data.backgroundImage);
       } catch (error) {
-        console.error(
-          "Error fetching background image:",
-          error.response.data.message
-        );
+        console.error("Error fetching background image:", error);
       } finally {
         setLoading(false);
       }
@@ -23,22 +22,25 @@ const GetBgImg = () => {
     fetchBackgroundImage();
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="w-full md:w-8/12 shadow-sm border-2 border-solid">
-      <div style={{ height: loading ? "20%" : "700px", overflow: "hidden" }}>
-        {loading ? (
-          <p>Loading background image...</p>
-        ) : backgroundImage ? (
-          <img
-            src={backgroundImage.backgroundImage}
-            alt="Background"
-            className="w-full h-full object-cover rounded-lg"
-          />
-        ) : (
-          <div className="w-full h-16 bg-gray-200 rounded-lg"></div>
-        )}
+    <div className="flex justify-center w-full md:w-6/12 h-96 my-5  mx-auto shadow-lg border border-gray-400 rounded-md relative ">
+      {Array.isArray(backgroundImage) ? (
+        backgroundImage.map((item) => (
+          <img key={item._id} src={item.image} alt="" />
+        ))
+      ) : (
+        // If not an array, assume it's a single object
+        <img src={backgroundImage.image} alt="" />
+      )}
+      <div className="absolute items-center top-20">
+        <UploadBgImg/>.
       </div>
     </div>
+
   );
 };
 
