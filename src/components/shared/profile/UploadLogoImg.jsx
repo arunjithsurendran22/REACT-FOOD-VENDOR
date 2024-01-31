@@ -1,23 +1,29 @@
 import { useState } from "react";
-import api from "../../authorization/api"
+import api from "../../authorization/api";
 import { toast } from "react-toastify";
+import { BsPlus } from "react-icons/bs"; // Import plus icon from react-icons
 
 const UploadLogoImg = () => {
   const [logoImg, setLogoImg] = useState(null);
 
   const handleLogoImage = (e) => {
     setLogoImg(e.target.files[0]);
+    // Automatically upload image when selected
+    uploadLogoImg(e.target.files[0]);
   };
 
-  const uploadLogoImg = async () => {
+  const uploadLogoImg = async (selectedImg) => {
     try {
       const formData = new FormData();
-      formData.append("image", logoImg);
+      formData.append("image", selectedImg);
 
-      // Update the API endpoint according to your backend
-      const responseLogoImg = await api.post("/image-controller/logo-image/add", formData);
-      setLogoImg(responseLogoImg.data)
-      // Show success toast
+      const responseLogoImg = await api.post(
+        "/image-controller/logo-image/add",
+        formData
+      );
+
+      // Update the state and show success toast
+      setLogoImg(responseLogoImg.data);
       toast.success("Successfully added logo image");
     } catch (error) {
       // Handle the error and show an error toast
@@ -27,20 +33,19 @@ const UploadLogoImg = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Logo Image</h2>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleLogoImage}
-        className="mb-4"
-      />
-      <button
-        onClick={uploadLogoImg}
-        className="bg-blue-500 text-white px-4 py-2"
-      >
-        Upload Logo Image
-      </button>
+    <div className="mx-auto p-8" style={{border:"2px solid blue"}}>
+      <div>
+        <label className="text-white p-10 cursor-pointer inline-flex items-center shadow-lg">
+          <BsPlus className="mr-2" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleLogoImage}
+            className="hidden"
+            required
+          />
+        </label>
+      </div>
     </div>
   );
 };

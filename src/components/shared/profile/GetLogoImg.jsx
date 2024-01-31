@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../../authorization/api";
 import { toast } from "react-toastify";
-import GetProfile from "./GetProfile";
+import UploadLogoImg from "./UploadLogoImg";
 
 const GetLogoImg = () => {
   const [logoImg, setLogoImg] = useState(null);
@@ -10,7 +10,8 @@ const GetLogoImg = () => {
     const fetchLogoImage = async () => {
       try {
         const response = await api.get("image-controller/logo-image/get");
-        setLogoImg(response.data);
+        const { image } = response.data.logoImage;
+        setLogoImg(image);
       } catch (error) {
         console.error(
           "Failed to fetch logo image",
@@ -23,22 +24,11 @@ const GetLogoImg = () => {
   }, []);
 
   return (
-    <div className="bg-black w-full md:w-8/12 h-40 rounded-md absolute bottom-0 flex flex-col justify-center">
-      <div className="flex items-center md:w-6/12 justify-around">
-        {logoImg && logoImg.logoImage && (
-          <div className=" w-32">
-            <img
-              src={logoImg.logoImage.logoImage}
-              alt="Logo"
-              className=" max-w-full rounded-lg"
-            />
-          </div>
-        )}
-        <div>
-          <GetProfile/>
-        </div>
+    <div className="w-40 text-center mx-auto relative" style={{ border: "2px solid green" }}>
+      <img src={logoImg} alt={logoImg} className="mb-4" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <UploadLogoImg />
       </div>
-      {!logoImg && <p>Loading logo image...</p>}
     </div>
   );
 };

@@ -33,9 +33,9 @@ const UploadBgImg = () => {
   };
 
   return (
-    <div className=" mx-auto p-8">
+    <div className=" mx-auto " style={{border:"2px solid red"}}>
       <div>
-        <label className=" text-white p-10 cursor-pointer inline-flex items-center shadow-lg ">
+        <label className=" text-white p-5 cursor-pointer inline-flex items-center shadow-lg ">
           <BsPlus className="mr-2" />
           <input
             type="file"
