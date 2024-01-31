@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import api from "../../authorization/api";
 import UploadBgImg from "./UploadBgImg";
 import GetLogoImg from "./GetLogoImg";
-import UploadLogoImg from "./UploadLogoImg";
 
 const GetBgImg = () => {
   const [backgroundImage, setBackgroundImage] = useState({});
@@ -29,15 +28,18 @@ const GetBgImg = () => {
   }
 
   return (
-    <div className="relative container mx-auto flex justify-center">
+    <div
+      className="relative container mx-auto flex justify-center h-96 "
+      style={{ border: "2px solid yellow" }}
+    >
       <img
         src={backgroundImage}
         alt={backgroundImage}
-        className="mx-auto shadow-lg rounded"
+        className="shadow-lg rounded h-96 object-fill"
       />
-      <div className="absolute top-72 h-96  w-8/12 flex flex-col justify-between" style={{border:"2px solid yellow"}}>
+      <div className="absolute  flex flex-col justify-between">
         <UploadBgImg />
-        <div className="" style={{border:"2px solid yellow"}} >
+        <div className="" style={{ border: "2px solid green" }}>
           <GetLogoImg />
         </div>
       </div>

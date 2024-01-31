@@ -52,6 +52,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     path: "/delivery-options",
     icon: <GiPostOffice />,
   },
+  {
+    key: "working-hours",
+    label: "Working Hours",
+    path: "/working-hours",
+    icon: <GiPostOffice />,
+  },
 ];
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [

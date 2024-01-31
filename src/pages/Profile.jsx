@@ -2,7 +2,7 @@ import GetBgImg from "../components/shared/profile/GetBgImg";
 
 const Profile = () => {
   return (
-    <div className="">
+    <div className="w-full md:w-8/12 mx-auto h-96 my-20"style={{border:"2px solid red"}}>
       <div>
         <GetBgImg />
       </div>

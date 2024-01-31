@@ -14,6 +14,7 @@ import ViewOrders from "./components/shared/ViewOrders";
 import BasicTable from "./components/shared/table/BasicTable";
 import EditProduct from "./pages/EditProduct";
 import DeliveryOptions from "./pages/DeliveryOptions";
+import WorkingHours from "./pages/WorkingHours";
 
 function App() {
   return (
@@ -27,14 +28,15 @@ function App() {
           <Route path="/get-profile" element={<Profile />} />
           <Route path="/products-list" element={<ProductsList />} />
           <Route path="/add-product" element={<AddProduct />} />
-          <Route path="/edit-product/:productId" element={<EditProduct/>}/>
+          <Route path="/edit-product/:productId" element={<EditProduct />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/view-orders/:orderId" element={<ViewOrders/>}/>
-          <Route path="/delivery-options" element={<DeliveryOptions/>}/>
+          <Route path="/view-orders/:orderId" element={<ViewOrders />} />
+          <Route path="/delivery-options" element={<DeliveryOptions />} />
+          <Route path="/working-hours" element={<WorkingHours />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/table" element={<BasicTable/>}/>
+        <Route path="/table" element={<BasicTable />} />
       </Routes>
     </Router>
   );
