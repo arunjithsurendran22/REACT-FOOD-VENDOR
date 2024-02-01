@@ -58,6 +58,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     path: "/working-hours",
     icon: <GiPostOffice />,
   },
+  {
+    key: "Coupon",
+    label: "Coupon",
+    path: "/coupon",
+    icon: <GiPostOffice />,
+  },
 ];
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
