@@ -1,3 +1,4 @@
+import AddAddress from "../components/shared/profile/AddAddress";
 import GetBgImg from "../components/shared/profile/GetBgImg";
 
 const Profile = () => {
@@ -6,6 +7,7 @@ const Profile = () => {
       <div>
         <GetBgImg />
       </div>
+      <AddAddress/>
     </div>
   );
 };

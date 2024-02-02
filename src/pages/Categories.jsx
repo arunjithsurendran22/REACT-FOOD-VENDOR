@@ -5,7 +5,6 @@ import BasicTable from "../components/shared/table/BasicTable";
 const Categories = () => {
   const [categories, setCategories] = useState([]);
 
-
   const CATEGORYLIST = [
     {
       Header: "IMAGE",
@@ -27,17 +26,15 @@ const Categories = () => {
       Header: "DESCRIPTION",
       accessor: "description",
     },
-  ]
+  ];
 
   useEffect(() => {
     // Fetch food categories from the backend when the component mounts
     const fetchCategories = async () => {
       try {
         const response = await api.get("/products/add-on-category/get/list");
-        setCategories(response.data.categories);
-        console.log(response.data.categories);
+        setCategories(response.data.foodCategories);
       } catch (error) {
-
         console.error("Error fetching food categories:", error);
       }
     };
@@ -46,7 +43,7 @@ const Categories = () => {
   }, []);
 
   return (
-    <div  >
+    <div>
       <BasicTable dataProps={categories} columnsProps={CATEGORYLIST} />
     </div>
   );

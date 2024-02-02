@@ -21,8 +21,8 @@ const AddProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get("/products/add-on-category/get/list");
-        console.log(response.data.categories);
-        setCategories(response.data.categories);
+        console.log(response.data.foodCategories);
+        setCategories(response.data.foodCategories);
       } catch (error) {
         setError("Failed to fetch categories");
         console.error("Error fetching categories:", error);

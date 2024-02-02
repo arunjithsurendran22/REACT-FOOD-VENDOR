@@ -21,15 +21,14 @@ const AddAddress = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/profile/add-address", address);
-      console.log("API Response:", response);
+      await api.post("/profile/add-address", address);
       setAddress({
         street: "",
         city: "",
         state: "",
         landmark: "",
         pincode: "",
-      }); 
+      });
       toast.success("Successfully added address");
     } catch (error) {
       console.log(error, "failed to add address");

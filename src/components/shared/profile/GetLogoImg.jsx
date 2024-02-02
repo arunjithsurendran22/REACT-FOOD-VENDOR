@@ -10,8 +10,9 @@ const GetLogoImg = () => {
     const fetchLogoImage = async () => {
       try {
         const response = await api.get("image-controller/logo-image/get");
-        const { image } = response.data.logoImage;
-        setLogoImg(image);
+        const { logoImage } = response.data;
+
+        setLogoImg(logoImage);
       } catch (error) {
         console.error(
           "Failed to fetch logo image",

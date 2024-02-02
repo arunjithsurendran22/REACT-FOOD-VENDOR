@@ -72,7 +72,7 @@ const ProductsList = () => {
     const fetchProductItems = async () => {
       try {
         const response = await api.get("/products/add-on-item/get/list");
-        setProductItems(response.data);
+        setProductItems(response.data.productItems);
       } catch (error) {
         toast.error("Failed to fetch Product Items");
       }

@@ -11,8 +11,8 @@ const GetBgImg = () => {
     const fetchBackgroundImage = async () => {
       try {
         const response = await api.get("image-controller/background-image/get");
-        const { image } = response.data.backgroundImage;
-        setBackgroundImage(image);
+        const { backgroundImage } = response.data
+        setBackgroundImage(backgroundImage);
       } catch (error) {
         console.error("Error fetching background image:", error);
       } finally {
@@ -39,7 +39,7 @@ const GetBgImg = () => {
       />
       <div className="absolute  flex flex-col justify-between">
         <UploadBgImg />
-        <div className="" style={{ border: "2px solid green" }}>
+        <div className=" mt-20" style={{ border: "2px solid green" }}>
           <GetLogoImg />
         </div>
       </div>
