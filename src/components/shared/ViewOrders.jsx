@@ -9,22 +9,24 @@ const ViewOrders = () => {
   const { orderId } = useParams();
 
   useEffect(() => {
-    const fetchOrderList = async () => {
+    const fetchOrderDetails = async () => {
       try {
         // Fetch order details
         const response = await api.get(`/products/orders-list/address-products/get/${orderId}`);
-        const { cartItems: fetchedCartItems, address: fetchedAddress } = response.data;
         
+        // Destructure the response data
+        const { address, products } = response.data;
+
         // Update state with fetched data
-        setCartItems(fetchedCartItems);
-        setUserAddress(fetchedAddress);
+        setCartItems(products);
+        setUserAddress(address);
       } catch (error) {
-        toast.error("Failed to fetch Order List");
+        toast.error("Failed to fetch Order Details");
       }
     };
 
-    fetchOrderList();
-  }, [orderId]); 
+    fetchOrderDetails();
+  }, [orderId]);
 
   return (
     <div className="flex space-x-8 p-4 rounded-lg m-16">
@@ -32,7 +34,7 @@ const ViewOrders = () => {
         <h2 className="text-2xl font-bold mb-4">User Order Items</h2>
         <ul>
           {cartItems.map((item) => (
-            <li key={item._id} className="flex items-center space-x-4 py-2 border-b">
+            <li key={item.productId} className="flex items-center space-x-4 py-2 border-b">
               <img src={item.image} alt={item.productTitle} className="w-20 h-20 rounded-full object-cover" />
               <div>
                 <p className="text-lg font-bold italic">{item.productTitle}</p>

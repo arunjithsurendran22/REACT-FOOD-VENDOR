@@ -7,15 +7,16 @@ import BasicTable from "../components/shared/table/BasicTable";
 
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const ORDERDATA = [
     {
       Header: "ORDER ID",
-      accessor: "orderId",
+      accessor: "orders.orderId",
     },
     {
       Header: "PAYMENT ID",
-      accessor: "paymentId",
+      accessor: "orders.paymentId",
     },
     {
       Header: "NAME",
@@ -31,22 +32,22 @@ const Orders = () => {
     },
     {
       Header: "STATUS",
-      accessor: "status",
+      accessor: "orders.status",
     },
     {
       Header: "TOTAL",
-      accessor: "total",
+      accessor: "orders.totalAmount",
     },
     {
       Header: "CREATED AT",
-      accessor: "createdAt",
+      accessor: "orders.createdAt",
       Cell: ({ value }) => <span>{new Date(value).toLocaleString()}</span>,
     },
     {
       Header: "VIEW",
       accessor: "view",
       Cell: ({ row }) => (
-        <Link to={`/view-orders/${row.original.orderId}`}>
+        <Link to={`/view-orders/${row.original.orders.orderId}`}>
           <button>
             <FaEye />
           </button>
@@ -58,9 +59,9 @@ const Orders = () => {
       accessor: "action",
       Cell: ({ row }) => (
         <select
-          value={row.original.status}
+          value={row.original.orders.status}
           onChange={(e) =>
-            handleStatusChange(row.original.orderId, e.target.value)
+            handleStatusChange(row.original.orders.orderId, e.target.value)
           }
         >
           <option value="pending">Pending</option>
@@ -80,8 +81,12 @@ const Orders = () => {
         const response = await api.get("/products/orders-list/get");
         const orderListData = response.data.orderList;
         setOrderData(orderListData);
+
       } catch (error) {
-        toast.error("Failed to fetch Order List");
+        console.error("Failed to fetch Order List", error);
+        toast.error("Failed to fetch Order List. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -98,19 +103,26 @@ const Orders = () => {
       // Update the status for the specific order
       setOrderData((prevData) =>
         prevData.map((order) =>
-          order.orderId === orderId ? { ...order, status: newStatus } : order
+          order.orders.orderId === orderId
+            ? { ...order, orders: { ...order.orders, status: newStatus } }
+            : order
         )
       );
 
       toast.success("Order status updated successfully");
     } catch (error) {
-      toast.error("Failed to update order status");
+      console.error("Failed to update order status", error);
+      toast.error("Failed to update order status. Please try again later.");
     }
   };
 
   return (
     <div>
-      <BasicTable dataProps={orderData} columnsProps={ORDERDATA} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <BasicTable dataProps={orderData} columnsProps={ORDERDATA} />
+      )}
     </div>
   );
 };
