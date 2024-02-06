@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import {toast} from 'react-toastify'
+import api from "../components/authorization/api";
 
 function Login() {
   const [formData, setFormData] = useState({});
@@ -18,8 +18,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios
-      .post("http://localhost:3000/api/v1/vendor/profile/login", formData)
+    await api
+      .post("/profile/login", formData)
       .then((response) => {
         console.log(response);
         toast.success("Login Successfully")
