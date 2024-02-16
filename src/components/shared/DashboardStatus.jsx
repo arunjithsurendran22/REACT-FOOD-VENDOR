@@ -27,7 +27,7 @@ const DashboardStatus = () => {
   },[]);
 
   return (
-    <div className="flex gap-5 m-9">
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-5 container mx-auto mt-20">
       <div className="bg-white border-2 p-4 flex-1  flex items-center rounded-md h-20 shadow-xl">
         <IoBagHandleOutline size={40} />
         <div className="flex flex-col mx-8">
