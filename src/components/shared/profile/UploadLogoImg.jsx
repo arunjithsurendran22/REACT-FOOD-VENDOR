@@ -33,7 +33,7 @@ const UploadLogoImg = () => {
   };
 
   return (
-    <div className="mx-auto p-8" style={{border:"2px solid blue"}}>
+    <div className="mx-auto p-8">
       <div>
         <label className="text-white p-10 cursor-pointer inline-flex items-center shadow-lg">
           <BsPlus className="mr-2" />

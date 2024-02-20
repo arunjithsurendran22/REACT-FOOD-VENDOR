@@ -25,8 +25,8 @@ const GetLogoImg = () => {
   }, []);
 
   return (
-    <div className="w-40 text-center mx-auto relative" style={{ border: "2px solid green" }}>
-      <img src={logoImg} alt={logoImg} className="mb-4" />
+    <div className="w-40 text-center mx-auto relative" >
+      <img src={logoImg} alt={logoImg} className="mb-4 rounded-full w-32 h-32" />
       <div className="absolute inset-0 flex items-center justify-center">
         <UploadLogoImg />
       </div>
